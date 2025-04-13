@@ -103,7 +103,7 @@ for {
 
 既然 `if` 是表达式，为什么 `for` 不能也是呢？
 
-##### Looop 型循环求值
+##### Loop 型循环求值
 
 先来看最简单的情况
 
@@ -125,7 +125,9 @@ value = for {
 ```tn
 value = for COND {
     // do something
-} else { EXPR };
+} else {
+    EXPR
+};
 ```
 
 当 `COND` 条件不成立、循环结束时，就会对 `else` 代码块求值，并将其作为 `for` 表达式的值了。
@@ -139,7 +141,9 @@ value = for COND {
     if COND { break EXPR1; }
 
     // do something
-} else { EXPR2 };
+} else {
+    EXPR2
+};
 ```
 
 ### `match` 匹配
@@ -160,6 +164,23 @@ match EXPR {
 ```
 
 太好了，不需要`break`，我们有救了！
+
+> 以上代码完全等效于用 `==` 依次比较的实现：
+>
+> ```tn
+> let v = EXPR;
+> if v == PATTERN1 {
+>     EXPR1
+> } else if v == PATTERN2 {
+>     EXPR2
+> } else if v == PATTERN3 || v == PATTERN4 {
+>     EXPR3
+> } else {
+>     EXPR4
+> }
+> ```
+>
+> 至于是否需要实现 Rust 语言那种更强的功能，以后再说
 
 ## 数据、变量、类型
 
@@ -367,4 +388,12 @@ my_func(); // 打印10
 my_func(); // 打印11
 a = 20;
 my_func(); // 打印20
+```
+
+## 方法
+
+方法是一种关联到特定类型上的函数
+
+```tn
+
 ```
