@@ -1,0 +1,4 @@
+union {
+    Foo(i32),
+    Bar(string),
+}

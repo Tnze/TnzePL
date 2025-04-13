@@ -1,0 +1,17 @@
+// Push mode
+let counter = fn(start: i32, end: i32) {
+    return fn(yield: fn(i32)) {
+        let i = start;
+        for i < end {
+            yield(i)
+            i += 1;
+        }
+    }
+};
+
+for i : counter(0, 10) {
+    print(i)
+}
+
+// Output:
+// 0123456789

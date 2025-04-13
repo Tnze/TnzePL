@@ -1,0 +1,36 @@
+// "if" 表达式
+if CONDITION {
+    EXPRESSION
+}
+
+// "if-else" 表达式
+if CONDITION {
+    EXP1
+} else {
+    EXP2
+}
+
+// "if-else-if" 表达式
+if COND1 {
+    EXP1
+} else if COND2 {
+    EXP2
+} else if COND3 {
+    EXP3
+} else {
+    EXPN
+}
+
+// 三元表达式
+if COND { EXP1 } else { EXP2 }
+
+// match EXPR {
+//     PATTERN1 => { EXPR1 }
+//     PATTERN2 => {
+//         EXPR2
+//     }
+//     PATTERN3 | PATTERN4 => {
+//         EXPR3
+//     }
+//     default => { EXPR4 }
+// }

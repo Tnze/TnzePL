@@ -1,0 +1,44 @@
+fn(param1: T1, param2: T2, ...) -> R {
+    // do something
+}
+
+let my_func = fn(param1: T1, param2: T2, ...) -> R {
+    // do something
+};
+
+func1(fn(param1: T1, param2: T2, ...) -> R {
+    // do something
+})
+
+my_func(arg1, arg2);
+
+let fib = fn(n: u32) -> u32 {
+    return if n == 0 {
+        0
+    } else if n == 1 {
+        1
+    } else {
+        fib(n - 1) + fib(n - 2)
+    };
+};
+
+let func = fn() {
+    print("foo");
+    func = fn() { print("bar"); };
+};
+
+func(); // 打印foo
+func(); // 打印bar
+func(); // 打印bar
+
+let a = 10;
+
+my_func = fn() {
+    print(a); // 变量a不是在函数里面定义的，但是却可以使用
+    a += 1;
+};
+
+my_func(); // 打印10
+my_func(); // 打印11
+a = 20;
+my_func(); // 打印20
