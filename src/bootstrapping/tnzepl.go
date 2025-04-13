@@ -495,6 +495,36 @@ tndefault:
 	// dummy call; replaced with literal code
 	switch tnnt {
 
+	case 10:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:27
+		{
+			tnVAL.Value = find(tnDollar[1])
+		}
+	case 11:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:28
+		{
+			tnVAL.Value = eval(tnDollar[1])
+		}
+	case 26:
+		tnDollar = tnS[tnpt-5 : tnpt+1]
+//line tnzepl.y:57
+		{
+			bind(tnDollar[2], eval(tnDollar[4]))
+		}
+	case 27:
+		tnDollar = tnS[tnpt-6 : tnpt+1]
+//line tnzepl.y:58
+		{
+			bind(tnDollar[2], eval(tnDollar[5]))
+		}
+	case 28:
+		tnDollar = tnS[tnpt-4 : tnpt+1]
+//line tnzepl.y:59
+		{
+			bind(tnDollar[1], eval(tnDollar[3]))
+		}
 	}
 	goto tnstack /* stack new state and value */
 }

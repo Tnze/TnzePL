@@ -17,6 +17,7 @@ type (
 		yys int // yy State
 		*lexmachine.Token
 	}
+	unEvaled []byte
 )
 
 func (t *tnLex) Lex(lval *tnSymType) int {
@@ -30,7 +31,9 @@ func (t *tnLex) Lex(lval *tnSymType) int {
 	}
 
 	lval.Token = tok.(*lexmachine.Token)
-	log.Print(lval)
+	if tnDebug > 0 {
+		log.Print(lval)
+	}
 	return lval.Type
 }
 
@@ -40,7 +43,7 @@ func (t *tnLex) Error(s string) {
 
 func token(id int) lexmachine.Action {
 	return func(scan *lexmachine.Scanner, match *machines.Match) (any, error) {
-		return scan.Token(id, string(match.Bytes), match), nil
+		return scan.Token(id, unEvaled(match.Bytes), match), nil
 	}
 }
 
@@ -49,7 +52,7 @@ func singleCharToken(scan *lexmachine.Scanner, match *machines.Match) (any, erro
 		log.Panic(match)
 		return scan.Token(0, nil, match), errors.New("not a single charactor")
 	}
-	return scan.Token(int(match.Bytes[0]), rune(match.Bytes[0]), match), nil
+	return scan.Token(int(match.Bytes[0]), unEvaled(match.Bytes), match), nil
 }
 
 func ignoreToken(scan *lexmachine.Scanner, match *machines.Match) (any, error) {
@@ -66,8 +69,8 @@ func main() {
 	lexer.Add([]byte(`=>`), token(RARROW))
 	lexer.Add([]byte("break"), token(BREAK))
 	lexer.Add([]byte("continue"), token(CONTINUE))
+	lexer.Add([]byte(`-?[0-9]+|true|false|"[^"]*"`), token(LITERAL))
 	lexer.Add([]byte(`[a-zA-Z_][a-zA-Z0-9_]*`), token(IDENTIFIER))
-	lexer.Add([]byte(`[0-9]+|true|false|"[^"]*"`), token(LITERAL))
 	lexer.Add([]byte(`:|;|\{|\}|=|\(|\)|,`), singleCharToken)
 	lexer.Add([]byte(`//[^\n]*\r?\n`), token(COMMENT))
 	lexer.Add([]byte(` |\t|\r?\n`), ignoreToken)
@@ -76,7 +79,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	source, err := os.ReadFile("./testfiles/for.tn")
+	source, err := os.ReadFile("./testfiles/main.tn")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -93,6 +96,8 @@ func main() {
 	// 	log.Println(tok.(tnSymType).id)
 	// }
 	tnErrorVerbose = true
-	tnDebug = 1
+	tnDebug = 0
 	tnParse(&tnLex{Scanner: scanner})
+
+	log.Printf("%v", identifiers)
 }

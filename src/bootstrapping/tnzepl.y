@@ -24,8 +24,8 @@ expr        : if_expr
             | for_expr
             | func
             | func_call
-            | IDENTIFIER
-            | LITERAL
+            | IDENTIFIER { $$.Value = find($1) }
+            | LITERAL { $$.Value = eval($1) }
             ;
 
 type        : IDENTIFIER ;
@@ -54,9 +54,9 @@ break       : BREAK ';'
 block       : '{' program '}'
             ;
 
-assign      : LET IDENTIFIER '=' expr ';'
-            | LET IDENTIFIER type_anno '=' expr ';'
-            | IDENTIFIER '=' expr ';'
+assign      : LET IDENTIFIER '=' expr ';' { bind($2, eval($4)) }
+            | LET IDENTIFIER type_anno '=' expr ';' { bind($2, eval($5)) }
+            | IDENTIFIER '=' expr ';' { bind($1, eval($3)) }
             ;
 
 func        : FN '(' args ')' ret_anno block
