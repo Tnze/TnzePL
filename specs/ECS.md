@@ -1,6 +1,6 @@
 # Integrated Entity-Component-System
 
-一门天生适配 ECS 的编程理念的语言是什么样的？
+把 ECS 的编程理念融入语言设计里会怎么样？
 
 ## Component
 
