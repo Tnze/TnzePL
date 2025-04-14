@@ -1,10 +1,19 @@
 package main
 
 import (
+	"slices"
 	"strconv"
 )
 
-var identifiers = make(map[string]any)
+type tnScope map[string]any
+
+var (
+	rootScope = make(tnScope)
+	scopes    = []tnScope{rootScope}
+)
+
+func pushScope() { scopes = append(scopes, nil) }
+func popScope()  { scopes = scopes[:len(scopes)-1] }
 
 type (
 	expr interface {
@@ -18,6 +27,10 @@ type (
 		ifCheckList []exprIfCheckItem
 		elseBranch  expr
 	}
+	statDefine struct {
+		identifier string
+		expression expr
+	}
 	statAssign struct {
 		identifier string
 		expression expr
@@ -27,25 +40,57 @@ type (
 	exprProg    []expr
 )
 
-func (e exprIf) eval() any {
+func (e exprIf) eval() (v any) {
 	for _, checkItem := range e.ifCheckList {
 		if checkItem.cond.eval().(bool) {
-			return checkItem.action.eval()
+			pushScope()
+			v = checkItem.action.eval()
+			popScope()
+			return
 		}
 	}
 	if e.elseBranch != nil {
-		return e.elseBranch.eval()
+		pushScope()
+		v = e.elseBranch.eval()
+		popScope()
 	}
+	return
+}
+
+func (s statDefine) eval() any {
+	v := s.expression.eval()
+	scope := &scopes[len(scopes)-1]
+	if *scope == nil {
+		*scope = make(tnScope)
+	}
+	(*scope)[s.identifier] = v
 	return nil
 }
 
 func (s statAssign) eval() any {
-	identifiers[s.identifier] = s.expression.eval()
-	return nil
+	v := s.expression.eval()
+	for _, scope := range slices.Backward(scopes) {
+		if scope == nil {
+			continue
+		}
+		if _, ok := scope[s.identifier]; ok {
+			scope[s.identifier] = v
+			return nil
+		}
+	}
+	panic("Assign to undefined identifier: " + s.identifier)
 }
 
 func (e exprLoad) eval() any {
-	return identifiers[e.identifier]
+	for _, scope := range slices.Backward(scopes) {
+		if scope == nil {
+			continue
+		}
+		if v, ok := scope[e.identifier]; ok {
+			return v
+		}
+	}
+	return nil
 }
 
 func (e exprLiteral) eval() any {
@@ -56,16 +101,11 @@ func (e exprProg) eval() (v any) {
 	for _, e := range e {
 		v = e.eval()
 	}
-	return v
+	return
 }
 
 func evalLiteral(sym tnSymType) expr {
-	bytesLiteral, ok := sym.Value.(unEvaled)
-	if !ok {
-		return sym.Value.(expr) // Already evaluated
-	}
-
-	literal := string(bytesLiteral)
+	literal := string(sym.Value.(unEvaled))
 	if literal == "true" {
 		return exprLiteral{value: true}
 	}

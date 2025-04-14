@@ -102,5 +102,5 @@ func main() {
 	// log.Printf("%#v", tnRoot)
 
 	tnRoot.eval()
-	log.Printf("%v", identifiers)
+	log.Printf("%v", rootScope)
 }

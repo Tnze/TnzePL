@@ -1,9 +1,8 @@
 %{
 package main
 
-import (
-    "github.com/timtadh/lexmachine"
-)
+import "github.com/timtadh/lexmachine"
+// import "log"
 
 var tnRoot expr
 %}
@@ -21,7 +20,7 @@ file        : program { tnRoot = $$.Value.(expr) } ;
 
 program     : /* empty */ { $$.Token = &lexmachine.Token { Value: exprProg{} } }
             | program expr { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
-            | program COMMENT { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
+            | program COMMENT { $$.Value = $1.Value }
             | program assign { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
             | program break { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
             ;
@@ -78,13 +77,13 @@ block       : '{' program '}' { $$.Value = $2.Value }
             ;
 
 assign      : LET IDENTIFIER '=' expr ';' {
-                $$.Value = statAssign {
+                $$.Value = statDefine {
                     identifier: string($2.Value.(unEvaled)),
                     expression: $4.Value.(expr),
                 }
             }
             | LET IDENTIFIER type_anno '=' expr ';' {
-                $$.Value = statAssign {
+                $$.Value = statDefine {
                     identifier: string($2.Value.(unEvaled)),
                     expression: $4.Value.(expr),
                 }

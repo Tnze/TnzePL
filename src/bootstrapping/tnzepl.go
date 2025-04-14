@@ -8,9 +8,9 @@ import __yyfmt__ "fmt"
 
 //line tnzepl.y:3
 
-import (
-	"github.com/timtadh/lexmachine"
-)
+import "github.com/timtadh/lexmachine"
+
+// import "log"
 
 var tnRoot expr
 
@@ -504,55 +504,55 @@ tndefault:
 
 	case 1:
 		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:20
+//line tnzepl.y:19
 		{
 			tnRoot = tnVAL.Value.(expr)
 		}
 	case 2:
 		tnDollar = tnS[tnpt-0 : tnpt+1]
-//line tnzepl.y:22
+//line tnzepl.y:21
 		{
 			tnVAL.Token = &lexmachine.Token{Value: exprProg{}}
 		}
 	case 3:
 		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:23
+//line tnzepl.y:22
 		{
 			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
 		}
 	case 4:
 		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:24
+//line tnzepl.y:23
 		{
-			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
+			tnVAL.Value = tnDollar[1].Value
 		}
 	case 5:
 		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:25
+//line tnzepl.y:24
 		{
 			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
 		}
 	case 6:
 		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:26
+//line tnzepl.y:25
 		{
 			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
 		}
 	case 12:
 		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:34
+//line tnzepl.y:33
 		{
 			tnVAL.Value = exprLoad{identifier: string(tnDollar[1].Value.(unEvaled))}
 		}
 	case 13:
 		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:35
+//line tnzepl.y:34
 		{
 			tnVAL.Value = evalLiteral(tnDollar[1])
 		}
 	case 16:
 		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:42
+//line tnzepl.y:41
 		{
 			checkItem := exprIfCheckItem{cond: tnDollar[2].Value.(expr), action: tnDollar[3].Value.(expr)}
 			tnVAL.Value = exprIf{
@@ -562,7 +562,7 @@ tndefault:
 		}
 	case 17:
 		tnDollar = tnS[tnpt-5 : tnpt+1]
-//line tnzepl.y:49
+//line tnzepl.y:48
 		{
 			ev := tnDollar[1].Value.(exprIf)
 			checkItem := exprIfCheckItem{cond: tnDollar[4].Value.(expr), action: tnDollar[5].Value.(expr)}
@@ -571,7 +571,7 @@ tndefault:
 		}
 	case 18:
 		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:56
+//line tnzepl.y:55
 		{
 			ev := tnDollar[1].Value.(exprIf)
 			ev.elseBranch = tnDollar[3].Value.(expr)
@@ -579,31 +579,31 @@ tndefault:
 		}
 	case 27:
 		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:77
+//line tnzepl.y:76
 		{
 			tnVAL.Value = tnDollar[2].Value
 		}
 	case 28:
 		tnDollar = tnS[tnpt-5 : tnpt+1]
-//line tnzepl.y:80
+//line tnzepl.y:79
 		{
-			tnVAL.Value = statAssign{
+			tnVAL.Value = statDefine{
 				identifier: string(tnDollar[2].Value.(unEvaled)),
 				expression: tnDollar[4].Value.(expr),
 			}
 		}
 	case 29:
 		tnDollar = tnS[tnpt-6 : tnpt+1]
-//line tnzepl.y:86
+//line tnzepl.y:85
 		{
-			tnVAL.Value = statAssign{
+			tnVAL.Value = statDefine{
 				identifier: string(tnDollar[2].Value.(unEvaled)),
 				expression: tnDollar[4].Value.(expr),
 			}
 		}
 	case 30:
 		tnDollar = tnS[tnpt-4 : tnpt+1]
-//line tnzepl.y:92
+//line tnzepl.y:91
 		{
 			tnVAL.Value = statAssign{
 				identifier: string(tnDollar[1].Value.(unEvaled)),

@@ -1,13 +1,13 @@
 let foo = 123;
-let bar = true;
-if bar {
-    foo = 456;
+if true {
+    let bar = 100;
+    foo = bar;
 }
 
-foo = if false {
-    234
-} else if false {
-    345
-} else {
-    678
-};
+// foo = if false {
+//     234
+// } else if false {
+//     345
+// } else {
+//     567
+// };
