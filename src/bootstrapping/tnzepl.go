@@ -8,7 +8,12 @@ import __yyfmt__ "fmt"
 
 //line tnzepl.y:3
 
-// import "log"
+import (
+	"github.com/timtadh/lexmachine"
+)
+
+var tnRoot expr
+
 const IF = 57346
 const ELSE = 57347
 const LET = 57348
@@ -61,76 +66,78 @@ var tnExca = [...]int8{
 
 const tnPrivate = 57344
 
-const tnLast = 114
+const tnLast = 117
 
 var tnAct = [...]int8{
-	27, 54, 47, 36, 6, 62, 1, 14, 2, 12,
-	15, 3, 10, 11, 17, 19, 13, 60, 61, 50,
-	51, 59, 22, 24, 25, 39, 40, 31, 34, 48,
-	44, 14, 18, 19, 15, 43, 23, 11, 17, 30,
-	14, 46, 26, 15, 52, 23, 11, 17, 32, 53,
-	57, 28, 64, 28, 37, 14, 76, 68, 35, 70,
-	65, 69, 67, 74, 73, 75, 72, 71, 28, 41,
-	28, 66, 78, 79, 49, 38, 37, 14, 80, 77,
-	15, 58, 23, 11, 17, 55, 63, 48, 14, 21,
-	12, 15, 3, 10, 11, 17, 14, 13, 42, 15,
-	20, 23, 11, 17, 56, 29, 33, 45, 16, 9,
-	8, 7, 5, 4,
+	30, 60, 2, 41, 52, 22, 67, 33, 16, 3,
+	14, 17, 4, 12, 13, 19, 42, 15, 65, 66,
+	40, 35, 64, 56, 57, 25, 27, 28, 44, 45,
+	59, 36, 39, 49, 48, 16, 53, 31, 17, 80,
+	26, 13, 19, 42, 54, 21, 22, 34, 51, 74,
+	58, 72, 37, 46, 31, 70, 62, 69, 55, 16,
+	31, 43, 17, 63, 26, 13, 19, 71, 78, 73,
+	79, 77, 76, 75, 68, 61, 82, 83, 53, 47,
+	23, 32, 84, 16, 81, 29, 17, 20, 26, 13,
+	19, 38, 16, 50, 18, 17, 31, 26, 13, 19,
+	11, 10, 9, 16, 24, 14, 17, 4, 12, 13,
+	19, 8, 15, 7, 6, 5, 1,
 }
 
 var tnPact = [...]int16{
-	-1000, 84, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
-	13, -1000, 91, 73, 92, 36, 100, 19, 92, 27,
-	39, -1000, 59, -5, 34, 53, 89, -1000, -1000, 34,
-	20, 58, -1000, -2, -1000, 92, 30, 76, -1000, 99,
-	-1000, 92, 66, 3, -1000, -4, 74, -1000, 61, -1000,
-	-1000, 92, 55, 92, -1000, -1000, 51, 43, 92, -1000,
-	74, 78, 34, 76, -1000, -1000, -1000, 40, -1000, -1000,
-	92, 34, 34, -1000, -1000, -1000, -1000, 34, -1000, -1000,
-	-1000,
+	-1000, -1000, 99, -1000, -1000, -1000, -1000, 82, -1000, -1000,
+	-1000, -1000, 26, -1000, 71, 88, 55, 79, 76, -13,
+	43, 55, 31, 1, -1000, 45, -15, 20, 37, 70,
+	-1000, -1000, 20, 27, 55, -1000, 42, -1000, 2, -1000,
+	55, 11, 66, -1000, -1000, -1000, 55, 48, 4, -1000,
+	-3, 62, -1000, 28, 20, -1000, -1000, 55, 35, 55,
+	-1000, -1000, 33, 55, -1000, 62, 69, 20, 66, -1000,
+	-1000, -1000, -1000, 23, 55, 20, 20, -1000, -1000, -1000,
+	-1000, 20, -1000, -1000, -1000,
 }
 
 var tnPgo = [...]int8{
-	0, 6, 8, 113, 112, 4, 111, 110, 109, 1,
-	3, 0, 108, 107, 5, 2, 106,
+	0, 116, 2, 9, 115, 114, 113, 111, 102, 101,
+	100, 1, 3, 0, 94, 93, 6, 4, 91,
 }
 
 var tnR1 = [...]int8{
-	0, 1, 1, 1, 1, 1, 2, 2, 2, 2,
-	2, 2, 9, 10, 5, 5, 5, 12, 12, 12,
-	6, 6, 6, 4, 4, 11, 3, 3, 3, 7,
-	7, 13, 13, 15, 8, 8, 16, 16, 14, 14,
+	0, 1, 2, 2, 2, 2, 2, 3, 3, 3,
+	3, 3, 3, 3, 11, 12, 6, 6, 7, 14,
+	14, 14, 8, 8, 8, 5, 5, 13, 4, 4,
+	4, 9, 9, 17, 15, 15, 10, 10, 18, 18,
+	16, 16,
 }
 
 var tnR2 = [...]int8{
-	0, 0, 2, 2, 2, 2, 1, 1, 1, 1,
-	1, 1, 1, 2, 3, 5, 5, 3, 7, 6,
-	2, 1, 3, 2, 3, 3, 5, 6, 4, 6,
-	5, 3, 1, 2, 3, 4, 3, 1, 0, 2,
+	0, 1, 0, 2, 2, 2, 2, 1, 1, 1,
+	1, 1, 1, 1, 1, 2, 3, 5, 3, 3,
+	7, 6, 2, 1, 3, 2, 3, 3, 5, 6,
+	4, 6, 5, 2, 1, 3, 3, 4, 3, 1,
+	0, 2,
 }
 
 var tnChk = [...]int16{
-	-1000, -1, -2, 8, -3, -4, -5, -6, -7, -8,
-	9, 10, 6, 13, 4, 7, -12, 11, 19, 20,
-	9, 16, -2, 9, -2, -2, 6, -11, 17, 5,
-	20, -2, 21, -16, -2, 19, -10, 15, 16, -11,
-	-11, 16, 9, -1, -11, -13, 21, -15, 9, 16,
-	21, 22, -2, 19, -9, 9, 5, -2, 15, 18,
-	21, 22, -14, 12, -10, -2, 16, -2, -11, -5,
-	16, -2, -14, -15, -11, -9, 16, -2, -11, -11,
-	-11,
+	-1000, -1, -2, -3, 8, -4, -5, -6, -7, -8,
+	-9, -10, 9, 10, 6, 13, 4, 7, -14, 11,
+	5, 19, 20, 9, 16, -3, 9, -3, -3, 6,
+	-13, 17, 5, 20, 4, -13, -3, 21, -18, -3,
+	19, -12, 15, 16, -13, -13, 16, 9, -2, -13,
+	-15, 21, -17, 9, -3, 16, 21, 22, -3, 19,
+	-11, 9, -3, 15, 18, 21, 22, -16, 12, -12,
+	-13, -3, 16, -3, 16, -3, -16, -17, -13, -11,
+	16, -3, -13, -13, -13,
 }
 
 var tnDef = [...]int8{
-	1, -2, 2, 3, 4, 5, 6, 7, 8, 9,
-	10, 11, 0, 0, 0, 0, 21, 0, 0, 0,
-	0, 23, 0, 10, 0, 0, 0, 20, 1, 0,
-	0, 0, 34, 0, 37, 0, 0, 0, 24, 14,
-	17, 0, 0, 0, 22, 0, 38, 32, 0, 28,
-	35, 0, 0, 0, 13, 12, 0, 0, 0, 25,
-	38, 0, 0, 0, 33, 36, 26, 0, 15, 16,
-	0, 0, 0, 31, 30, 39, 27, 0, 19, 29,
-	18,
+	2, -2, 1, 3, 4, 5, 6, 7, 8, 9,
+	10, 11, 12, 13, 0, 0, 0, 0, 23, 0,
+	0, 0, 0, 0, 25, 0, 12, 0, 0, 0,
+	22, 2, 0, 0, 0, 18, 0, 36, 0, 39,
+	0, 0, 0, 26, 16, 19, 0, 0, 0, 24,
+	0, 40, 34, 0, 0, 30, 37, 0, 0, 0,
+	15, 14, 0, 0, 27, 40, 0, 0, 0, 33,
+	17, 38, 28, 0, 0, 0, 0, 35, 32, 41,
+	29, 0, 21, 31, 20,
 }
 
 var tnTok1 = [...]int8{
@@ -495,35 +502,113 @@ tndefault:
 	// dummy call; replaced with literal code
 	switch tnnt {
 
-	case 10:
+	case 1:
 		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:27
+//line tnzepl.y:20
 		{
-			tnVAL.Value = find(tnDollar[1])
+			tnRoot = tnVAL.Value.(expr)
 		}
-	case 11:
+	case 2:
+		tnDollar = tnS[tnpt-0 : tnpt+1]
+//line tnzepl.y:22
+		{
+			tnVAL.Token = &lexmachine.Token{Value: exprProg{}}
+		}
+	case 3:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:23
+		{
+			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
+		}
+	case 4:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:24
+		{
+			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
+		}
+	case 5:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:25
+		{
+			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
+		}
+	case 6:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:26
+		{
+			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
+		}
+	case 12:
 		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:28
+//line tnzepl.y:34
 		{
-			tnVAL.Value = eval(tnDollar[1])
+			tnVAL.Value = exprLoad{identifier: string(tnDollar[1].Value.(unEvaled))}
 		}
-	case 26:
+	case 13:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:35
+		{
+			tnVAL.Value = evalLiteral(tnDollar[1])
+		}
+	case 16:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:42
+		{
+			checkItem := exprIfCheckItem{cond: tnDollar[2].Value.(expr), action: tnDollar[3].Value.(expr)}
+			tnVAL.Value = exprIf{
+				ifCheckList: []exprIfCheckItem{checkItem},
+				elseBranch:  nil,
+			}
+		}
+	case 17:
 		tnDollar = tnS[tnpt-5 : tnpt+1]
-//line tnzepl.y:57
+//line tnzepl.y:49
 		{
-			bind(tnDollar[2], eval(tnDollar[4]))
+			ev := tnDollar[1].Value.(exprIf)
+			checkItem := exprIfCheckItem{cond: tnDollar[4].Value.(expr), action: tnDollar[5].Value.(expr)}
+			ev.ifCheckList = append(ev.ifCheckList, checkItem)
+			tnVAL.Value = ev
+		}
+	case 18:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:56
+		{
+			ev := tnDollar[1].Value.(exprIf)
+			ev.elseBranch = tnDollar[3].Value.(expr)
+			tnVAL.Value = ev
 		}
 	case 27:
-		tnDollar = tnS[tnpt-6 : tnpt+1]
-//line tnzepl.y:58
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:77
 		{
-			bind(tnDollar[2], eval(tnDollar[5]))
+			tnVAL.Value = tnDollar[2].Value
 		}
 	case 28:
-		tnDollar = tnS[tnpt-4 : tnpt+1]
-//line tnzepl.y:59
+		tnDollar = tnS[tnpt-5 : tnpt+1]
+//line tnzepl.y:80
 		{
-			bind(tnDollar[1], eval(tnDollar[3]))
+			tnVAL.Value = statAssign{
+				identifier: string(tnDollar[2].Value.(unEvaled)),
+				expression: tnDollar[4].Value.(expr),
+			}
+		}
+	case 29:
+		tnDollar = tnS[tnpt-6 : tnpt+1]
+//line tnzepl.y:86
+		{
+			tnVAL.Value = statAssign{
+				identifier: string(tnDollar[2].Value.(unEvaled)),
+				expression: tnDollar[4].Value.(expr),
+			}
+		}
+	case 30:
+		tnDollar = tnS[tnpt-4 : tnpt+1]
+//line tnzepl.y:92
+		{
+			tnVAL.Value = statAssign{
+				identifier: string(tnDollar[1].Value.(unEvaled)),
+				expression: tnDollar[3].Value.(expr),
+			}
 		}
 	}
 	goto tnstack /* stack new state and value */

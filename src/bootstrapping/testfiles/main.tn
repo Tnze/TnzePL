@@ -1,2 +1,11 @@
 let foo = 123;
 let bar = true;
+if bar {
+    foo = 456;
+}
+
+if false {
+    foo = 234;
+} else if true {
+    foo = 345;
+}
