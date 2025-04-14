@@ -66,78 +66,79 @@ var tnExca = [...]int8{
 
 const tnPrivate = 57344
 
-const tnLast = 117
+const tnLast = 121
 
 var tnAct = [...]int8{
-	30, 60, 2, 41, 52, 22, 67, 33, 16, 3,
-	14, 17, 4, 12, 13, 19, 42, 15, 65, 66,
-	40, 35, 64, 56, 57, 25, 27, 28, 44, 45,
-	59, 36, 39, 49, 48, 16, 53, 31, 17, 80,
-	26, 13, 19, 42, 54, 21, 22, 34, 51, 74,
-	58, 72, 37, 46, 31, 70, 62, 69, 55, 16,
-	31, 43, 17, 63, 26, 13, 19, 71, 78, 73,
-	79, 77, 76, 75, 68, 61, 82, 83, 53, 47,
-	23, 32, 84, 16, 81, 29, 17, 20, 26, 13,
-	19, 38, 16, 50, 18, 17, 31, 26, 13, 19,
-	11, 10, 9, 16, 24, 14, 17, 4, 12, 13,
-	19, 8, 15, 7, 6, 5, 1,
+	33, 63, 44, 2, 55, 3, 70, 18, 56, 15,
+	19, 4, 13, 14, 21, 24, 16, 17, 68, 69,
+	54, 67, 27, 38, 30, 31, 59, 60, 36, 39,
+	42, 47, 48, 62, 18, 34, 52, 19, 51, 28,
+	14, 21, 45, 57, 23, 24, 43, 49, 34, 61,
+	83, 40, 37, 77, 75, 65, 58, 18, 73, 72,
+	19, 46, 28, 14, 21, 34, 74, 29, 76, 26,
+	45, 81, 78, 82, 80, 79, 66, 71, 64, 85,
+	86, 56, 50, 84, 18, 87, 32, 19, 25, 28,
+	14, 21, 35, 22, 41, 53, 18, 34, 15, 19,
+	4, 13, 14, 21, 18, 16, 17, 19, 20, 28,
+	14, 21, 12, 11, 10, 9, 8, 7, 6, 5,
+	1,
 }
 
 var tnPact = [...]int16{
-	-1000, -1000, 99, -1000, -1000, -1000, -1000, 82, -1000, -1000,
-	-1000, -1000, 26, -1000, 71, 88, 55, 79, 76, -13,
-	43, 55, 31, 1, -1000, 45, -15, 20, 37, 70,
-	-1000, -1000, 20, 27, 55, -1000, 42, -1000, 2, -1000,
-	55, 11, 66, -1000, -1000, -1000, 55, 48, 4, -1000,
-	-3, 62, -1000, 28, 20, -1000, -1000, 55, 35, 55,
-	-1000, -1000, 33, 55, -1000, 62, 69, 20, 66, -1000,
-	-1000, -1000, -1000, 23, 55, 20, 20, -1000, -1000, -1000,
-	-1000, 20, -1000, -1000, -1000,
+	-1000, -1000, 92, -1000, -1000, -1000, -1000, -1000, 88, -1000,
+	-1000, -1000, -1000, 25, -1000, 79, 53, 51, 100, 80,
+	87, 8, 48, 100, 30, 27, -1000, 45, -5, -1000,
+	18, 31, 73, -1000, -1000, 18, -1, 100, -1000, 40,
+	-1000, 5, -1000, 100, 14, 69, -1000, -1000, -1000, 100,
+	61, 3, -1000, -3, 65, -1000, 55, 18, -1000, -1000,
+	100, 38, 100, -1000, -1000, 37, 100, -1000, 65, 72,
+	18, 69, -1000, -1000, -1000, -1000, 34, 100, 18, 18,
+	-1000, -1000, -1000, -1000, 18, -1000, -1000, -1000,
 }
 
 var tnPgo = [...]int8{
-	0, 116, 2, 9, 115, 114, 113, 111, 102, 101,
-	100, 1, 3, 0, 94, 93, 6, 4, 91,
+	0, 120, 3, 5, 119, 118, 117, 116, 115, 114,
+	113, 112, 1, 2, 0, 108, 95, 6, 4, 94,
 }
 
 var tnR1 = [...]int8{
-	0, 1, 2, 2, 2, 2, 2, 3, 3, 3,
-	3, 3, 3, 3, 11, 12, 6, 6, 7, 14,
-	14, 14, 8, 8, 8, 5, 5, 13, 4, 4,
-	4, 9, 9, 17, 15, 15, 10, 10, 18, 18,
-	16, 16,
+	0, 1, 2, 2, 2, 2, 2, 2, 3, 3,
+	3, 3, 3, 3, 3, 12, 13, 7, 7, 8,
+	15, 15, 15, 9, 9, 9, 5, 5, 6, 14,
+	4, 4, 4, 10, 10, 18, 16, 16, 11, 11,
+	19, 19, 17, 17,
 }
 
 var tnR2 = [...]int8{
-	0, 1, 0, 2, 2, 2, 2, 1, 1, 1,
-	1, 1, 1, 1, 1, 2, 3, 5, 3, 3,
-	7, 6, 2, 1, 3, 2, 3, 3, 5, 6,
-	4, 6, 5, 2, 1, 3, 3, 4, 3, 1,
-	0, 2,
+	0, 1, 0, 2, 2, 2, 2, 2, 1, 1,
+	1, 1, 1, 1, 1, 1, 2, 3, 5, 3,
+	3, 7, 6, 2, 1, 3, 2, 3, 2, 3,
+	5, 6, 4, 6, 5, 2, 1, 3, 3, 4,
+	3, 1, 0, 2,
 }
 
 var tnChk = [...]int16{
 	-1000, -1, -2, -3, 8, -4, -5, -6, -7, -8,
-	-9, -10, 9, 10, 6, 13, 4, 7, -14, 11,
-	5, 19, 20, 9, 16, -3, 9, -3, -3, 6,
-	-13, 17, 5, 20, 4, -13, -3, 21, -18, -3,
-	19, -12, 15, 16, -13, -13, 16, 9, -2, -13,
-	-15, 21, -17, 9, -3, 16, 21, 22, -3, 19,
-	-11, 9, -3, 15, 18, 21, 22, -16, 12, -12,
-	-13, -3, 16, -3, 16, -3, -16, -17, -13, -11,
-	16, -3, -13, -13, -13,
+	-9, -10, -11, 9, 10, 6, 13, 14, 4, 7,
+	-15, 11, 5, 19, 20, 9, 16, -3, 9, 16,
+	-3, -3, 6, -14, 17, 5, 20, 4, -14, -3,
+	21, -19, -3, 19, -13, 15, 16, -14, -14, 16,
+	9, -2, -14, -16, 21, -18, 9, -3, 16, 21,
+	22, -3, 19, -12, 9, -3, 15, 18, 21, 22,
+	-17, 12, -13, -14, -3, 16, -3, 16, -3, -17,
+	-18, -14, -12, 16, -3, -14, -14, -14,
 }
 
 var tnDef = [...]int8{
 	2, -2, 1, 3, 4, 5, 6, 7, 8, 9,
-	10, 11, 12, 13, 0, 0, 0, 0, 23, 0,
-	0, 0, 0, 0, 25, 0, 12, 0, 0, 0,
-	22, 2, 0, 0, 0, 18, 0, 36, 0, 39,
-	0, 0, 0, 26, 16, 19, 0, 0, 0, 24,
-	0, 40, 34, 0, 0, 30, 37, 0, 0, 0,
-	15, 14, 0, 0, 27, 40, 0, 0, 0, 33,
-	17, 38, 28, 0, 0, 0, 0, 35, 32, 41,
-	29, 0, 21, 31, 20,
+	10, 11, 12, 13, 14, 0, 0, 0, 0, 0,
+	24, 0, 0, 0, 0, 0, 26, 0, 13, 28,
+	0, 0, 0, 23, 2, 0, 0, 0, 19, 0,
+	38, 0, 41, 0, 0, 0, 27, 17, 20, 0,
+	0, 0, 25, 0, 42, 36, 0, 0, 32, 39,
+	0, 0, 0, 16, 15, 0, 0, 29, 42, 0,
+	0, 0, 35, 18, 40, 30, 0, 0, 0, 0,
+	37, 34, 43, 31, 0, 22, 33, 21,
 }
 
 var tnTok1 = [...]int8{
@@ -538,72 +539,93 @@ tndefault:
 		{
 			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
 		}
-	case 12:
-		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:33
+	case 7:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:26
 		{
-			tnVAL.Value = exprLoad{identifier: string(tnDollar[1].Value.(unEvaled))}
+			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
 		}
 	case 13:
 		tnDollar = tnS[tnpt-1 : tnpt+1]
 //line tnzepl.y:34
 		{
+			tnVAL.Value = exprLoad{identifier: string(tnDollar[1].Value.(unEvaled))}
+		}
+	case 14:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:35
+		{
 			tnVAL.Value = evalLiteral(tnDollar[1])
 		}
-	case 16:
-		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:41
-		{
-			checkItem := exprIfCheckItem{cond: tnDollar[2].Value.(expr), action: tnDollar[3].Value.(expr)}
-			tnVAL.Value = exprIf{
-				ifCheckList: []exprIfCheckItem{checkItem},
-				elseBranch:  nil,
-			}
-		}
 	case 17:
-		tnDollar = tnS[tnpt-5 : tnpt+1]
-//line tnzepl.y:48
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:42
 		{
-			ev := tnDollar[1].Value.(exprIf)
-			checkItem := exprIfCheckItem{cond: tnDollar[4].Value.(expr), action: tnDollar[5].Value.(expr)}
-			ev.ifCheckList = append(ev.ifCheckList, checkItem)
-			tnVAL.Value = ev
+			tnVAL.Value = exprIf{}.addIf(tnDollar[2], tnDollar[3])
 		}
 	case 18:
-		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:55
+		tnDollar = tnS[tnpt-5 : tnpt+1]
+//line tnzepl.y:43
 		{
-			ev := tnDollar[1].Value.(exprIf)
-			ev.elseBranch = tnDollar[3].Value.(expr)
-			tnVAL.Value = ev
+			tnVAL.Value = tnDollar[1].Value.(exprIf).addIf(tnDollar[4], tnDollar[5])
+		}
+	case 19:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:45
+		{
+			tnVAL.Value = tnDollar[1].Value.(exprIf).addElse(tnDollar[3])
+		}
+	case 23:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:53
+		{
+			tnVAL.Value = exprLoop{body: tnDollar[2].Value.(exprProg)}
+		}
+	case 26:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:58
+		{
+			tnVAL.Value = exprBreak{}
 		}
 	case 27:
 		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:76
+//line tnzepl.y:59
+		{
+			tnVAL.Value = exprBreak{value: tnDollar[2].Value.(expr)}
+		}
+	case 28:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:62
+		{
+			tnVAL.Value = exprContinue{}
+		}
+	case 29:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:65
 		{
 			tnVAL.Value = tnDollar[2].Value
 		}
-	case 28:
-		tnDollar = tnS[tnpt-5 : tnpt+1]
-//line tnzepl.y:79
-		{
-			tnVAL.Value = statDefine{
-				identifier: string(tnDollar[2].Value.(unEvaled)),
-				expression: tnDollar[4].Value.(expr),
-			}
-		}
-	case 29:
-		tnDollar = tnS[tnpt-6 : tnpt+1]
-//line tnzepl.y:85
-		{
-			tnVAL.Value = statDefine{
-				identifier: string(tnDollar[2].Value.(unEvaled)),
-				expression: tnDollar[4].Value.(expr),
-			}
-		}
 	case 30:
+		tnDollar = tnS[tnpt-5 : tnpt+1]
+//line tnzepl.y:68
+		{
+			tnVAL.Value = statDefine{
+				identifier: string(tnDollar[2].Value.(unEvaled)),
+				expression: tnDollar[4].Value.(expr),
+			}
+		}
+	case 31:
+		tnDollar = tnS[tnpt-6 : tnpt+1]
+//line tnzepl.y:74
+		{
+			tnVAL.Value = statDefine{
+				identifier: string(tnDollar[2].Value.(unEvaled)),
+				expression: tnDollar[4].Value.(expr),
+			}
+		}
+	case 32:
 		tnDollar = tnS[tnpt-4 : tnpt+1]
-//line tnzepl.y:91
+//line tnzepl.y:80
 		{
 			tnVAL.Value = statAssign{
 				identifier: string(tnDollar[1].Value.(unEvaled)),

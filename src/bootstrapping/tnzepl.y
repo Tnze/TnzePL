@@ -18,11 +18,12 @@ var tnRoot expr
 
 file        : program { tnRoot = $$.Value.(expr) } ;
 
-program     : /* empty */ { $$.Token = &lexmachine.Token { Value: exprProg{} } }
-            | program expr { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
-            | program COMMENT { $$.Value = $1.Value }
-            | program assign { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
-            | program break { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
+program     : /* empty */       { $$.Token = &lexmachine.Token { Value: exprProg{} } }
+            | program expr      { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
+            | program COMMENT   { $$.Value = $1.Value }
+            | program assign    { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
+            | program break     { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
+            | program continue  { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
             ;
 
 expr        : if_expr
@@ -38,25 +39,10 @@ type        : IDENTIFIER ;
 type_anno   : ':' type
             ;
 
-if_expr     : IF expr block {
-                checkItem := exprIfCheckItem{ cond: $2.Value.(expr), action: $3.Value.(expr) }
-                $$.Value = exprIf {
-                    ifCheckList: []exprIfCheckItem{checkItem},
-                    elseBranch: nil,
-                }
-            }
-            | if_expr ELSE IF expr block {
-                ev := $1.Value.(exprIf)
-                checkItem := exprIfCheckItem{ cond: $4.Value.(expr), action: $5.Value.(expr) }
-                ev.ifCheckList = append(ev.ifCheckList, checkItem)
-                $$.Value = ev
-            }
+if_expr     : IF expr block                 { $$.Value = exprIf{}.addIf($2, $3) }
+            | if_expr ELSE IF expr block    { $$.Value = $1.Value.(exprIf).addIf($4, $5) }
             ;
-if_else_expr: if_expr ELSE block {
-                ev := $1.Value.(exprIf)
-                ev.elseBranch = $3.Value.(expr)
-                $$.Value = ev
-            }
+if_else_expr: if_expr ELSE block { $$.Value = $1.Value.(exprIf).addElse($3) }
             ;
 
 finite_for  : FOR expr block
@@ -64,13 +50,16 @@ finite_for  : FOR expr block
             | FOR LET IDENTIFIER ':' expr block
             ;
 
-for_expr    : FOR block
+for_expr    : FOR block             { $$.Value = exprLoop { body: $2.Value.(exprProg) } }
             | finite_for
             | finite_for ELSE block
             ;
 
-break       : BREAK ';'
-            | BREAK expr ';'
+break       : BREAK ';'         { $$.Value = exprBreak {} }
+            | BREAK expr ';'    { $$.Value = exprBreak { value: $2.Value.(expr) } }
+            ;
+
+continue    : CONTINUE ';' { $$.Value = exprContinue{} }
             ;
 
 block       : '{' program '}' { $$.Value = $2.Value }

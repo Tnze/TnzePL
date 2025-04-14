@@ -1,13 +1,6 @@
-let foo = 123;
-if true {
-    let bar = 100;
-    foo = bar;
-}
+let foo = 0;
 
-// foo = if false {
-//     234
-// } else if false {
-//     345
-// } else {
-//     567
-// };
+let bar = for {
+    foo = 1;
+};
+

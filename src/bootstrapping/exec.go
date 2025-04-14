@@ -17,8 +17,10 @@ func popScope()  { scopes = scopes[:len(scopes)-1] }
 
 type (
 	expr interface {
-		eval() any
+		eval() (v any, brk bool)
 	}
+	exprProg []expr
+	// Branch
 	exprIfCheckItem struct {
 		cond   expr
 		action expr
@@ -27,6 +29,7 @@ type (
 		ifCheckList []exprIfCheckItem
 		elseBranch  expr
 	}
+	// Assign
 	statDefine struct {
 		identifier string
 		expression expr
@@ -37,71 +40,120 @@ type (
 	}
 	exprLoad    struct{ identifier string }
 	exprLiteral struct{ value any }
-	exprProg    []expr
+	// Loop
+	exprBreak    struct{ value expr }
+	exprContinue struct{}
+	exprLoop     struct{ body exprProg }
 )
 
-func (e exprIf) eval() (v any) {
+func (e exprIf) eval() (v any, brk bool) {
 	for _, checkItem := range e.ifCheckList {
-		if checkItem.cond.eval().(bool) {
+		if c, cbrk := checkItem.cond.eval(); cbrk {
+			return c, brk
+		} else if c.(bool) {
 			pushScope()
-			v = checkItem.action.eval()
+			v, brk = checkItem.action.eval()
 			popScope()
 			return
 		}
 	}
 	if e.elseBranch != nil {
 		pushScope()
-		v = e.elseBranch.eval()
+		v, brk = e.elseBranch.eval()
 		popScope()
 	}
 	return
 }
 
-func (s statDefine) eval() any {
-	v := s.expression.eval()
+func (e exprIf) addIf(cond, action tnSymType) expr {
+	item := exprIfCheckItem{
+		cond:   cond.Value.(expr),
+		action: action.Value.(expr),
+	}
+	e.ifCheckList = append(e.ifCheckList, item)
+	return e
+}
+
+func (e exprIf) addElse(action tnSymType) expr {
+	e.elseBranch = action.Value.(expr)
+	return e
+}
+
+func (s statDefine) eval() (any, bool) {
+	v, brk := s.expression.eval()
+	if brk {
+		return v, brk
+	}
 	scope := &scopes[len(scopes)-1]
 	if *scope == nil {
 		*scope = make(tnScope)
 	}
 	(*scope)[s.identifier] = v
-	return nil
+	return nil, false
 }
 
-func (s statAssign) eval() any {
-	v := s.expression.eval()
+func (s statAssign) eval() (any, bool) {
+	v, brk := s.expression.eval()
+	if brk {
+		return v, brk
+	}
 	for _, scope := range slices.Backward(scopes) {
 		if scope == nil {
 			continue
 		}
 		if _, ok := scope[s.identifier]; ok {
 			scope[s.identifier] = v
-			return nil
+			return nil, false
 		}
 	}
 	panic("Assign to undefined identifier: " + s.identifier)
 }
 
-func (e exprLoad) eval() any {
+func (e exprLoad) eval() (any, bool) {
 	for _, scope := range slices.Backward(scopes) {
 		if scope == nil {
 			continue
 		}
 		if v, ok := scope[e.identifier]; ok {
-			return v
+			return v, false
 		}
 	}
-	return nil
+	return nil, false
 }
 
-func (e exprLiteral) eval() any {
-	return e.value
+func (e exprLiteral) eval() (any, bool) {
+	return e.value, false
 }
 
-func (e exprProg) eval() (v any) {
+func (e exprProg) eval() (v any, brk bool) {
 	for _, e := range e {
-		v = e.eval()
+		v, brk = e.eval()
+		if brk {
+			return
+		}
 	}
 	return
+}
+
+func (e exprLoop) eval() (any, bool) {
+	for {
+		v, brk := e.body.eval()
+		if brk && v != (exprContinue{}) {
+			return v, false // eat the flag
+		}
+	}
+}
+
+func (e exprBreak) eval() (any, bool) {
+	var v any
+	if e.value != nil {
+		v, _ = e.value.eval()
+	}
+	return v, true
+}
+
+func (e exprContinue) eval() (any, bool) {
+	return e, true
 }
 
 func evalLiteral(sym tnSymType) expr {
