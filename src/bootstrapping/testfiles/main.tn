@@ -4,8 +4,10 @@ if bar {
     foo = 456;
 }
 
-if false {
-    foo = 234;
-} else if true {
-    foo = 345;
-}
+foo = if false {
+    234
+} else if false {
+    345
+} else {
+    678
+};

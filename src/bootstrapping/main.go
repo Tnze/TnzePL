@@ -23,7 +23,6 @@ type (
 func (t *tnLex) Lex(lval *tnSymType) int {
 	tok, err, eos := t.Scanner.Next()
 	if eos {
-		log.Print("EOF")
 		return 0 // EOF
 	}
 	if err != nil {
@@ -100,7 +99,7 @@ func main() {
 	tnDebug = 0
 	tnParse(&tnLex{Scanner: scanner})
 
-	log.Printf("%#v", tnRoot)
+	// log.Printf("%#v", tnRoot)
 
 	tnRoot.eval()
 	log.Printf("%v", identifiers)

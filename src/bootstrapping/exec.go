@@ -22,17 +22,10 @@ type (
 		identifier string
 		expression expr
 	}
-	exprLoad struct {
-		identifier string
-	}
-	exprLiteral struct {
-		value any
-	}
-	exprProg []expr
-	exprUnit struct{}
+	exprLoad    struct{ identifier string }
+	exprLiteral struct{ value any }
+	exprProg    []expr
 )
-
-var unit = exprUnit{}
 
 func (e exprIf) eval() any {
 	for _, checkItem := range e.ifCheckList {
@@ -41,7 +34,7 @@ func (e exprIf) eval() any {
 		}
 	}
 	if e.elseBranch != nil {
-		return e.elseBranch
+		return e.elseBranch.eval()
 	}
 	return nil
 }
@@ -64,10 +57,6 @@ func (e exprProg) eval() (v any) {
 		v = e.eval()
 	}
 	return v
-}
-
-func (e exprUnit) eval() any {
-	return nil
 }
 
 func evalLiteral(sym tnSymType) expr {
