@@ -18,13 +18,12 @@ const IF = 57346
 const ELSE = 57347
 const LET = 57348
 const FOR = 57349
-const COMMENT = 57350
-const IDENTIFIER = 57351
-const LITERAL = 57352
-const FN = 57353
-const RARROW = 57354
-const BREAK = 57355
-const CONTINUE = 57356
+const IDENTIFIER = 57350
+const LITERAL = 57351
+const FN = 57352
+const RARROW = 57353
+const BREAK = 57354
+const CONTINUE = 57355
 
 var tnToknames = [...]string{
 	"$end",
@@ -34,21 +33,25 @@ var tnToknames = [...]string{
 	"ELSE",
 	"LET",
 	"FOR",
-	"COMMENT",
 	"IDENTIFIER",
 	"LITERAL",
 	"FN",
 	"RARROW",
 	"BREAK",
 	"CONTINUE",
-	"':'",
-	"';'",
 	"'{'",
 	"'}'",
-	"'='",
 	"'('",
 	"')'",
+	"';'",
+	"'='",
+	"'+'",
+	"'-'",
+	"'*'",
+	"'/'",
+	"'%'",
 	"','",
+	"':'",
 }
 
 var tnStatenames = [...]string{}
@@ -66,100 +69,95 @@ var tnExca = [...]int8{
 
 const tnPrivate = 57344
 
-const tnLast = 121
+const tnLast = 103
 
 var tnAct = [...]int8{
-	33, 63, 44, 2, 55, 3, 70, 18, 56, 15,
-	19, 4, 13, 14, 21, 24, 16, 17, 68, 69,
-	54, 67, 27, 38, 30, 31, 59, 60, 36, 39,
-	42, 47, 48, 62, 18, 34, 52, 19, 51, 28,
-	14, 21, 45, 57, 23, 24, 43, 49, 34, 61,
-	83, 40, 37, 77, 75, 65, 58, 18, 73, 72,
-	19, 46, 28, 14, 21, 34, 74, 29, 76, 26,
-	45, 81, 78, 82, 80, 79, 66, 71, 64, 85,
-	86, 56, 50, 84, 18, 87, 32, 19, 25, 28,
-	14, 21, 35, 22, 41, 53, 18, 34, 15, 19,
-	4, 13, 14, 21, 18, 16, 17, 19, 20, 28,
-	14, 21, 12, 11, 10, 9, 8, 7, 6, 5,
-	1,
+	38, 10, 11, 9, 4, 2, 71, 68, 45, 12,
+	26, 27, 31, 32, 33, 29, 30, 41, 75, 13,
+	35, 61, 24, 67, 34, 72, 55, 59, 41, 44,
+	46, 47, 48, 43, 49, 50, 51, 41, 58, 54,
+	60, 39, 62, 64, 65, 25, 56, 63, 23, 66,
+	5, 21, 6, 16, 42, 37, 7, 8, 14, 22,
+	15, 20, 23, 19, 53, 21, 28, 16, 52, 69,
+	74, 70, 14, 73, 15, 57, 76, 78, 79, 23,
+	77, 40, 21, 28, 16, 3, 18, 17, 36, 41,
+	23, 15, 1, 21, 28, 16, 0, 0, 0, 0,
+	14, 0, 15,
 }
 
 var tnPact = [...]int16{
-	-1000, -1000, 92, -1000, -1000, -1000, -1000, -1000, 88, -1000,
-	-1000, -1000, -1000, 25, -1000, 79, 53, 51, 100, 80,
-	87, 8, 48, 100, 30, 27, -1000, 45, -5, -1000,
-	18, 31, 73, -1000, -1000, 18, -1, 100, -1000, 40,
-	-1000, 5, -1000, 100, 14, 69, -1000, -1000, -1000, 100,
-	61, 3, -1000, -3, 65, -1000, 55, 18, -1000, -1000,
-	100, 38, 100, -1000, -1000, 37, 100, -1000, 65, 72,
-	18, 69, -1000, -1000, -1000, -1000, 34, 100, 18, 18,
-	-1000, -1000, -1000, -1000, 18, -1000, -1000, -1000,
+	44, -1000, -1000, 4, -1000, 37, -9, 86, -1000, -5,
+	-10, -1000, 8, -1000, 44, -1000, -1000, -1000, -1000, 50,
+	-1000, 75, 49, 86, 44, -11, 86, -5, -1000, 86,
+	86, 86, 86, 86, 44, 11, 58, 23, -1000, 3,
+	34, 44, 14, 14, -1000, 86, -5, -10, -10, -1000,
+	-1000, -1000, 6, -18, -1000, -1000, -1000, -1000, -1000, 86,
+	-1000, 86, -20, 10, -1000, -1000, -5, -1000, 44, 14,
+	0, 44, -1000, -1000, -1000, 44, 14, 14, -1000, -1000,
 }
 
 var tnPgo = [...]int8{
-	0, 120, 3, 5, 119, 118, 117, 116, 115, 114,
-	113, 112, 1, 2, 0, 108, 95, 6, 4, 94,
+	0, 92, 5, 88, 9, 19, 87, 86, 85, 4,
+	3, 1, 2, 68, 64, 63, 61, 0, 59,
 }
 
 var tnR1 = [...]int8{
-	0, 1, 2, 2, 2, 2, 2, 2, 3, 3,
-	3, 3, 3, 3, 3, 12, 13, 7, 7, 8,
-	15, 15, 15, 9, 9, 9, 5, 5, 6, 14,
-	4, 4, 4, 10, 10, 18, 16, 16, 11, 11,
-	19, 19, 17, 17,
+	0, 1, 3, 3, 4, 4, 5, 5, 5, 5,
+	5, 2, 2, 8, 8, 8, 9, 9, 9, 9,
+	9, 10, 10, 10, 11, 11, 11, 11, 12, 12,
+	13, 13, 14, 14, 6, 6, 16, 15, 15, 7,
+	7, 7, 18, 18, 18, 17,
 }
 
 var tnR2 = [...]int8{
-	0, 1, 0, 2, 2, 2, 2, 2, 1, 1,
-	1, 1, 1, 1, 1, 1, 2, 3, 5, 3,
-	3, 7, 6, 2, 1, 3, 2, 3, 2, 3,
-	5, 6, 4, 6, 5, 2, 1, 3, 3, 4,
-	3, 1, 0, 2,
+	0, 1, 0, 2, 1, 3, 3, 1, 1, 1,
+	1, 0, 1, 1, 3, 2, 4, 3, 2, 1,
+	1, 3, 3, 1, 3, 3, 3, 1, 4, 1,
+	0, 1, 3, 1, 1, 1, 3, 3, 5, 2,
+	1, 3, 3, 7, 6, 3,
 }
 
 var tnChk = [...]int16{
-	-1000, -1, -2, -3, 8, -4, -5, -6, -7, -8,
-	-9, -10, -11, 9, 10, 6, 13, 14, 4, 7,
-	-15, 11, 5, 19, 20, 9, 16, -3, 9, 16,
-	-3, -3, 6, -14, 17, 5, 20, 4, -14, -3,
-	21, -19, -3, 19, -13, 15, 16, -14, -14, 16,
-	9, -2, -14, -16, 21, -18, 9, -3, 16, 21,
-	22, -3, 19, -12, 9, -3, 15, 18, 21, 22,
-	-17, 12, -13, -14, -3, 16, -3, 16, -3, -17,
-	-18, -14, -12, 16, -3, -14, -14, -14,
+	-1000, -1, -2, -8, -9, 6, 8, 12, 13, -10,
+	-11, -12, -4, -5, 14, 16, 9, -6, -7, -15,
+	-16, 7, -18, 4, 18, 8, 19, -10, 8, 20,
+	21, 22, 23, 24, 16, -2, -3, 5, -17, -5,
+	6, 14, 5, -4, -9, 19, -10, -11, -11, -12,
+	-12, -12, -13, -14, -9, 15, -4, 17, -17, 4,
+	-17, 18, 8, -2, -17, -17, -10, 17, 25, -4,
+	-4, 26, 15, -9, -17, 18, -9, -9, -17, -17,
 }
 
 var tnDef = [...]int8{
-	2, -2, 1, 3, 4, 5, 6, 7, 8, 9,
-	10, 11, 12, 13, 14, 0, 0, 0, 0, 0,
-	24, 0, 0, 0, 0, 0, 26, 0, 13, 28,
-	0, 0, 0, 23, 2, 0, 0, 0, 19, 0,
-	38, 0, 41, 0, 0, 0, 27, 17, 20, 0,
-	0, 0, 25, 0, 42, 36, 0, 0, 32, 39,
-	0, 0, 0, 16, 15, 0, 0, 29, 42, 0,
-	0, 0, 35, 18, 40, 30, 0, 0, 0, 0,
-	37, 34, 43, 31, 0, 22, 33, 21,
+	11, -2, 1, 12, 13, 0, 8, 0, 19, 20,
+	23, 27, 29, 4, 11, 2, 7, 9, 10, 34,
+	35, 0, 40, 0, 15, 0, 0, 18, 8, 0,
+	0, 0, 0, 0, 30, 0, 0, 0, 39, 0,
+	0, 11, 0, 0, 14, 0, 17, 21, 22, 24,
+	25, 26, 0, 31, 33, 5, 3, 6, 36, 0,
+	42, 0, 0, 0, 41, 37, 16, 28, 0, 0,
+	0, 0, 45, 32, 38, 0, 0, 0, 44, 43,
 }
 
 var tnTok1 = [...]int8{
 	1, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	20, 21, 3, 3, 22, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 15, 16,
+	3, 3, 3, 3, 3, 3, 3, 24, 3, 3,
+	16, 17, 22, 20, 25, 21, 3, 23, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 26, 18,
 	3, 19, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 17, 3, 18,
+	3, 3, 3, 14, 3, 15,
 }
 
 var tnTok2 = [...]int8{
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-	12, 13, 14,
+	12, 13,
 }
 
 var tnTok3 = [...]int8{
@@ -511,126 +509,117 @@ tndefault:
 		}
 	case 2:
 		tnDollar = tnS[tnpt-0 : tnpt+1]
-//line tnzepl.y:21
+//line tnzepl.y:22
 		{
 			tnVAL.Token = &lexmachine.Token{Value: exprProg{}}
 		}
 	case 3:
 		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:22
-		{
-			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
-		}
-	case 4:
-		tnDollar = tnS[tnpt-2 : tnpt+1]
 //line tnzepl.y:23
 		{
-			tnVAL.Value = tnDollar[1].Value
+			tnVAL.Value = append(tnVAL.Value.(exprProg), tnDollar[2].Value.(expr))
 		}
 	case 5:
-		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:24
-		{
-			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
-		}
-	case 6:
-		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:25
-		{
-			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
-		}
-	case 7:
-		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:26
-		{
-			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[2].Value.(expr))
-		}
-	case 13:
-		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:34
-		{
-			tnVAL.Value = exprLoad{identifier: string(tnDollar[1].Value.(unEvaled))}
-		}
-	case 14:
-		tnDollar = tnS[tnpt-1 : tnpt+1]
-//line tnzepl.y:35
-		{
-			tnVAL.Value = evalLiteral(tnDollar[1])
-		}
-	case 17:
 		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:42
-		{
-			tnVAL.Value = exprIf{}.addIf(tnDollar[2], tnDollar[3])
-		}
-	case 18:
-		tnDollar = tnS[tnpt-5 : tnpt+1]
-//line tnzepl.y:43
-		{
-			tnVAL.Value = tnDollar[1].Value.(exprIf).addIf(tnDollar[4], tnDollar[5])
-		}
-	case 19:
-		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:45
-		{
-			tnVAL.Value = tnDollar[1].Value.(exprIf).addElse(tnDollar[3])
-		}
-	case 23:
-		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:53
-		{
-			tnVAL.Value = exprLoop{body: tnDollar[2].Value.(exprProg)}
-		}
-	case 26:
-		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:58
-		{
-			tnVAL.Value = exprBreak{}
-		}
-	case 27:
-		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:59
-		{
-			tnVAL.Value = exprBreak{value: tnDollar[2].Value.(expr)}
-		}
-	case 28:
-		tnDollar = tnS[tnpt-2 : tnpt+1]
-//line tnzepl.y:62
-		{
-			tnVAL.Value = exprContinue{}
-		}
-	case 29:
-		tnDollar = tnS[tnpt-3 : tnpt+1]
-//line tnzepl.y:65
+//line tnzepl.y:27
 		{
 			tnVAL.Value = tnDollar[2].Value
 		}
-	case 30:
-		tnDollar = tnS[tnpt-5 : tnpt+1]
-//line tnzepl.y:68
+	case 6:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:30
 		{
-			tnVAL.Value = statDefine{
-				identifier: string(tnDollar[2].Value.(unEvaled)),
-				expression: tnDollar[4].Value.(expr),
-			}
+			tnVAL.Value = tnDollar[2].Value
 		}
-	case 31:
-		tnDollar = tnS[tnpt-6 : tnpt+1]
-//line tnzepl.y:74
+	case 7:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:31
 		{
-			tnVAL.Value = statDefine{
-				identifier: string(tnDollar[2].Value.(unEvaled)),
-				expression: tnDollar[4].Value.(expr),
-			}
+			tnVAL.Value = evalLiteral(tnDollar[1])
 		}
-	case 32:
+	case 8:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:32
+		{
+			tnVAL.Value = exprLoad{identifier: string(tnDollar[1].Value.(unEvaled))}
+		}
+	case 11:
+		tnDollar = tnS[tnpt-0 : tnpt+1]
+//line tnzepl.y:37
+		{
+			tnVAL.Value = nil
+		}
+	case 13:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:40
+		{
+			tnVAL.Token = &lexmachine.Token{Value: exprProg{tnDollar[1].Value.(expr)}}
+		}
+	case 14:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:41
+		{
+			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[3].Value.(expr))
+		}
+	case 16:
 		tnDollar = tnS[tnpt-4 : tnpt+1]
-//line tnzepl.y:80
+//line tnzepl.y:46
+		{
+			tnVAL.Value = statDefine{
+				identifier: string(tnDollar[2].Value.(unEvaled)),
+				expression: tnDollar[4].Value.(expr),
+			}
+		}
+	case 17:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:58
 		{
 			tnVAL.Value = statAssign{
 				identifier: string(tnDollar[1].Value.(unEvaled)),
 				expression: tnDollar[3].Value.(expr),
 			}
+		}
+	case 18:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:64
+		{
+			tnVAL.Value = exprBreak{value: tnDollar[2].Value.(expr)}
+		}
+	case 19:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:65
+		{
+			tnVAL.Value = exprContinue{}
+		}
+	case 36:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:95
+		{
+			tnVAL.Value = tnDollar[1].Value.(exprIf).addElse(tnDollar[3])
+		}
+	case 37:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:98
+		{
+			tnVAL.Value = exprIf{}.addIf(tnDollar[2], tnDollar[3])
+		}
+	case 38:
+		tnDollar = tnS[tnpt-5 : tnpt+1]
+//line tnzepl.y:99
+		{
+			tnVAL.Value = tnDollar[1].Value.(exprIf).addIf(tnDollar[4], tnDollar[5])
+		}
+	case 39:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:102
+		{
+			tnVAL.Value = exprLoop{body: tnDollar[2].Value.(expr)}
+		}
+	case 45:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:111
+		{
+			tnVAL.Value = tnDollar[2].Value
 		}
 	}
 	goto tnstack /* stack new state and value */

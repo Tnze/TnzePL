@@ -43,7 +43,7 @@ type (
 	// Loop
 	exprBreak    struct{ value expr }
 	exprContinue struct{}
-	exprLoop     struct{ body exprProg }
+	exprLoop     struct{ body expr }
 )
 
 func (e exprIf) eval() (v any, brk bool) {

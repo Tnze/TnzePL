@@ -72,7 +72,7 @@ func main() {
 	lexer.Add([]byte(`-?[0-9]+|true|false|"[^"]*"`), token(LITERAL))
 	lexer.Add([]byte(`[a-zA-Z_][a-zA-Z0-9_]*`), token(IDENTIFIER))
 	lexer.Add([]byte(`:|;|\{|\}|=|\(|\)|,`), singleCharToken)
-	lexer.Add([]byte(`//[^\n]*\r?\n`), token(COMMENT))
+	lexer.Add([]byte(`//[^\n]*\r?\n`), ignoreToken)
 	lexer.Add([]byte(` |\t|\r?\n`), ignoreToken)
 
 	if err := lexer.Compile(); err != nil {

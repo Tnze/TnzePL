@@ -1,6 +1,6 @@
 let foo = 0;
-
 let bar = for {
     foo = 1;
+    break 2;
 };
 

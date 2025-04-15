@@ -8,7 +8,7 @@ var tnRoot expr
 %}
 
 %token IF ELSE LET FOR
-%token COMMENT
+// %token COMMENT
 %token IDENTIFIER LITERAL
 %token FN
 %token RARROW
@@ -16,93 +16,97 @@ var tnRoot expr
 
 %%
 
-file        : program { tnRoot = $$.Value.(expr) } ;
+file        : expr_stmt { tnRoot = $$.Value.(expr) } ;
 
-program     : /* empty */       { $$.Token = &lexmachine.Token { Value: exprProg{} } }
-            | program expr      { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
-            | program COMMENT   { $$.Value = $1.Value }
-            | program assign    { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
-            | program break     { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
-            | program continue  { $$.Value = append($1.Value.(exprProg), $2.Value.(expr)) }
+// "inline" exprs and "block" exprs
+atom_stmt   : /* empty */       { $$.Token = &lexmachine.Token{ Value: exprProg{} } }
+            | atom_stmt atom    { $$.Value = append($$.Value.(exprProg), $2.Value.(expr)) }
             ;
 
-expr        : if_expr
-            | if_else_expr
-            | for_expr
-            | func
-            | func_call
-            | IDENTIFIER    { $$.Value = exprLoad { identifier: string($1.Value.(unEvaled)) } }
-            | LITERAL       { $$.Value = evalLiteral($1) }
+atom        : atom_nb
+            | '{' expr_stmt '}' { $$.Value = $2.Value }
             ;
 
-type        : IDENTIFIER ;
-type_anno   : ':' type
+atom_nb     : '(' atom_stmt ')' { $$.Value = $2.Value }
+            | LITERAL           { $$.Value = evalLiteral($1) }
+            | IDENTIFIER        { $$.Value = exprLoad{ identifier: string($1.Value.(unEvaled)) } }
+            | if_stmt
+            | for_stmt
             ;
 
-if_expr     : IF expr block                 { $$.Value = exprIf{}.addIf($2, $3) }
-            | if_expr ELSE IF expr block    { $$.Value = $1.Value.(exprIf).addIf($4, $5) }
+expr_stmt   : /* empty */           { $$.Value = nil }
+            | expr_list
             ;
-if_else_expr: if_expr ELSE block { $$.Value = $1.Value.(exprIf).addElse($3) }
-            ;
-
-finite_for  : FOR expr block
-            | FOR expr ';' expr ';' expr block
-            | FOR LET IDENTIFIER ':' expr block
+expr_list   : expr                  { $$.Token = &lexmachine.Token{ Value: exprProg{ $1.Value.(expr) } } }
+            | expr_list ';' expr    { $$.Value = append($1.Value.(exprProg), $3.Value.(expr)) }
+            | expr_list ';'
             ;
 
-for_expr    : FOR block             { $$.Value = exprLoop { body: $2.Value.(exprProg) } }
-            | finite_for
-            | finite_for ELSE block
-            ;
 
-break       : BREAK ';'         { $$.Value = exprBreak {} }
-            | BREAK expr ';'    { $$.Value = exprBreak { value: $2.Value.(expr) } }
-            ;
-
-continue    : CONTINUE ';' { $$.Value = exprContinue{} }
-            ;
-
-block       : '{' program '}' { $$.Value = $2.Value }
-            ;
-
-assign      : LET IDENTIFIER '=' expr ';' {
+expr        : LET IDENTIFIER '=' assign {
                 $$.Value = statDefine {
                     identifier: string($2.Value.(unEvaled)),
                     expression: $4.Value.(expr),
                 }
             }
-            | LET IDENTIFIER type_anno '=' expr ';' {
-                $$.Value = statDefine {
-                    identifier: string($2.Value.(unEvaled)),
-                    expression: $4.Value.(expr),
-                }
-            }
-            | IDENTIFIER '=' expr ';' {
+            // | LET IDENTIFIER type_anno '=' assign {
+            //     $$.Value = statDefine {
+            //         identifier: string($2.Value.(unEvaled)),
+            //         expression: $4.Value.(expr),
+            //     }
+            // }
+            | IDENTIFIER '=' assign {
                 $$.Value = statAssign {
                     identifier: string($1.Value.(unEvaled)),
                     expression: $3.Value.(expr),
                 }
             }
+            | BREAK assign { $$.Value = exprBreak{ value: $2.Value.(expr) } }
+            | CONTINUE { $$.Value = exprContinue{} }
+            | assign
             ;
 
-func        : FN '(' args ')' ret_anno block
-            | FN '(' ')' ret_anno block
+assign      : assign '+' term
+            | assign '-' term
+            | term
             ;
 
-arg         : IDENTIFIER type_anno ;
-args        : arg
-            | args ',' arg
+term        : term '*' call
+            | term '/' call
+            | term '%' call
+            | call
             ;
 
-
-func_call   : IDENTIFIER '(' ')'
-            | IDENTIFIER '(' params ')'
+call        : atom '(' params_list ')'
+            | atom
             ;
 
+params_list : /* empty */ 
+            | params
+            ;
 params      : params ',' expr
             | expr
             ;
 
-ret_anno    : /* empty */
-            | RARROW type
+if_stmt     : if_only
+            | if_else
+            ;
+
+if_else     : if_only ELSE block_stmt           { $$.Value = $1.Value.(exprIf).addElse($3) }
+            ;
+
+if_only     : IF atom block_stmt                { $$.Value = exprIf{}.addIf($2, $3) }
+            | if_only ELSE IF atom block_stmt   { $$.Value = $1.Value.(exprIf).addIf($4, $5) }
+            ;
+
+for_stmt    : FOR block_stmt                    { $$.Value = exprLoop{ body: $2.Value.(expr) } }
+            | finite_for
+            | finite_for ELSE block_stmt
+            ;
+finite_for  : FOR atom_nb block_stmt
+            | FOR atom_nb ';' atom ';' expr block_stmt
+            | FOR LET IDENTIFIER ':' expr block_stmt
+            ;
+
+block_stmt  : '{' expr_stmt '}' { $$.Value = $2.Value }
             ;
