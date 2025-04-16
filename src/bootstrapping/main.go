@@ -99,16 +99,17 @@ func main() {
 	// 	log.Println(tok.(tnSymType).id)
 	// }
 	tnErrorVerbose = true
-	tnDebug = 1
+	tnDebug = 0
 	tnParse(&tnLex{Scanner: scanner})
 
 	// log.Printf("%#v", tnRoot)
 
-	builtinScope["print"] = func(args []any) any {
+	ctx := NewExecCtx()
+	ctx.rootScope["print"] = func(args []any) any {
 		n, _ := fmt.Println(args...)
 		return n
 	}
-	builtinScope["assert"] = func(args []any) any {
+	ctx.rootScope["assert"] = func(args []any) any {
 		if len(args) != 1 {
 			log.Panic("assert expect 1 boolean argument")
 		}
@@ -119,6 +120,6 @@ func main() {
 		}
 		return nil
 	}
-	tnRoot.eval()
-	log.Printf("Root Scope: %v", rootScope)
+	tnRoot.eval(ctx)
+	log.Printf("Root Scope: %v", ctx.rootScope)
 }

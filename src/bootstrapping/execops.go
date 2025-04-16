@@ -11,84 +11,84 @@ type (
 	exprNe [2]expr
 )
 
-func (e exprAdd) eval() (any, bool) {
-	rhs, brk := e[0].eval()
+func (e exprAdd) eval(ctx *ExecCtx) (any, bool) {
+	rhs, brk := e[0].eval(ctx)
 	if brk {
 		return rhs, brk
 	}
-	lhs, brk := e[1].eval()
+	lhs, brk := e[1].eval(ctx)
 	if brk {
 		return lhs, brk
 	}
 	return rhs.(int) + lhs.(int), false
 }
 
-func (e exprSub) eval() (any, bool) {
-	rhs, brk := e[0].eval()
+func (e exprSub) eval(ctx *ExecCtx) (any, bool) {
+	rhs, brk := e[0].eval(ctx)
 	if brk {
 		return rhs, brk
 	}
-	lhs, brk := e[1].eval()
+	lhs, brk := e[1].eval(ctx)
 	if brk {
 		return lhs, brk
 	}
 	return rhs.(int) - lhs.(int), false
 }
 
-func (e exprMul) eval() (any, bool) {
-	rhs, brk := e[0].eval()
+func (e exprMul) eval(ctx *ExecCtx) (any, bool) {
+	rhs, brk := e[0].eval(ctx)
 	if brk {
 		return rhs, brk
 	}
-	lhs, brk := e[1].eval()
+	lhs, brk := e[1].eval(ctx)
 	if brk {
 		return lhs, brk
 	}
 	return rhs.(int) * lhs.(int), false
 }
 
-func (e exprDiv) eval() (any, bool) {
-	rhs, brk := e[0].eval()
+func (e exprDiv) eval(ctx *ExecCtx) (any, bool) {
+	rhs, brk := e[0].eval(ctx)
 	if brk {
 		return rhs, brk
 	}
-	lhs, brk := e[1].eval()
+	lhs, brk := e[1].eval(ctx)
 	if brk {
 		return lhs, brk
 	}
 	return rhs.(int) / lhs.(int), false
 }
 
-func (e exprMod) eval() (any, bool) {
-	rhs, brk := e[0].eval()
+func (e exprMod) eval(ctx *ExecCtx) (any, bool) {
+	rhs, brk := e[0].eval(ctx)
 	if brk {
 		return rhs, brk
 	}
-	lhs, brk := e[1].eval()
+	lhs, brk := e[1].eval(ctx)
 	if brk {
 		return lhs, brk
 	}
 	return rhs.(int) % lhs.(int), false
 }
 
-func (e exprEq) eval() (any, bool) {
-	rhs, brk := e[0].eval()
+func (e exprEq) eval(ctx *ExecCtx) (any, bool) {
+	rhs, brk := e[0].eval(ctx)
 	if brk {
 		return rhs, brk
 	}
-	lhs, brk := e[1].eval()
+	lhs, brk := e[1].eval(ctx)
 	if brk {
 		return lhs, brk
 	}
 	return rhs == lhs, false
 }
 
-func (e exprNe) eval() (any, bool) {
-	rhs, brk := e[0].eval()
+func (e exprNe) eval(ctx *ExecCtx) (any, bool) {
+	rhs, brk := e[0].eval(ctx)
 	if brk {
 		return rhs, brk
 	}
-	lhs, brk := e[1].eval()
+	lhs, brk := e[1].eval(ctx)
 	if brk {
 		return lhs, brk
 	}
