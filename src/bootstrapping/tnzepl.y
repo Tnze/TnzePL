@@ -32,11 +32,12 @@ atom        : atom_nb
             | block_stmt
             | if_stmt
             | for_stmt
+            | fn_define
             ;
 
 atom_nb     : '(' expr1 ')'     { $$.Value = $2.Value }
             | LITERAL           { $$.Value = evalLiteral($1) }
-            | IDENTIFIER        { $$.Value = exprLoad{ identifier: string($1.Value.(unEvaled)) } }
+            | IDENTIFIER        { $$.Value = exprLoad{ identifier: string($1.Lexeme) } }
             ;
 
 stmt        : assign_stmt
@@ -47,19 +48,19 @@ stmt        : assign_stmt
 
 assign_stmt : LET IDENTIFIER '=' expr1 ';' {
                 $$.Value = statDefine {
-                    identifier: string($2.Value.(unEvaled)),
+                    identifier: string($2.Lexeme),
                     expression: $4.Value.(expr),
                 }
             }
             // | LET IDENTIFIER type_anno '=' assign ';' {
             //     $$.Value = statDefine {
-            //         identifier: string($2.Value.(unEvaled)),
+            //         identifier: string($2.Lexeme),
             //         expression: $4.Value.(expr),
             //     }
             // }
             | IDENTIFIER '=' expr1 ';' {
                 $$.Value = statAssign {
-                    identifier: string($1.Value.(unEvaled)),
+                    identifier: string($1.Lexeme),
                     expression: $3.Value.(expr),
                 }
             }
@@ -186,6 +187,37 @@ finite_for  : FOR expr1_nb block_stmt            { $$.Value = exprWhile{ cond: $
             | FOR LET IDENTIFIER ':' atom_nb block_stmt
             ;
 
-block_stmt  : '{' program '}'       { $$.Value = append($1.Value.(exprProg), exprEmpty{}) }
-            | '{' program expr1 '}' { $$.Value = append($1.Value.(exprProg), $3.Value.(expr)) }
+block_stmt  : '{' program '}'       { $$.Value = append($2.Value.(exprProg), exprEmpty{}) }
+            | '{' program expr1 '}' { $$.Value = append($2.Value.(exprProg), $3.Value.(expr)) }
+            ;
+
+fn_define   : FN '(' args_list ')' ret_anno block_stmt {
+                $$.Value = exprFuncDefine{
+                    args:   $3.Value.([]funcArgAnno),
+                    retTyp: $5.Value.(string),
+                    body:   $6.Value.(expr),
+                }
+            }
+            ;
+
+args_list   : /* empty */   { $$.Value = []funcArgAnno{} }
+            | args          { $$.Value = $1.Value }
+            ;
+args        : arg           { $$.Value = []funcArgAnno{ $1.Value.(funcArgAnno) } }
+            | args ',' arg  { $$.Value = append($1.Value.([]funcArgAnno), $3.Value.(funcArgAnno)) }
+            ;
+arg         : IDENTIFIER type_anno {
+                $$.Value = funcArgAnno{
+                    arg: string($1.Lexeme),
+                    typ: $2.Value.(string),
+                }
+            }
+            ;
+
+ret_anno    : /* empty */   { $$.Value = "" }
+            | RARROW type   { $$.Value = string($2.Lexeme) }
+            ;
+
+type        : IDENTIFIER ;
+type_anno   : ':' type { $$.Value = string($2.Lexeme) }
             ;

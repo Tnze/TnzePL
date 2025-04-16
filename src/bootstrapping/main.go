@@ -44,7 +44,7 @@ func (t *tnLex) Error(s string) {
 
 func token(id int) lexmachine.Action {
 	return func(scan *lexmachine.Scanner, match *machines.Match) (any, error) {
-		return scan.Token(id, unEvaled(match.Bytes), match), nil
+		return scan.Token(id, nil, match), nil
 	}
 }
 
@@ -53,7 +53,7 @@ func singleCharToken(scan *lexmachine.Scanner, match *machines.Match) (any, erro
 		log.Panic(match)
 		return scan.Token(0, nil, match), errors.New("not a single charactor")
 	}
-	return scan.Token(int(match.Bytes[0]), unEvaled(match.Bytes), match), nil
+	return scan.Token(int(match.Bytes[0]), nil, match), nil
 }
 
 func ignoreToken(scan *lexmachine.Scanner, match *machines.Match) (any, error) {
@@ -67,7 +67,7 @@ func main() {
 	lexer.Add([]byte("let"), token(LET))
 	lexer.Add([]byte("for"), token(FOR))
 	lexer.Add([]byte("fn"), token(FN))
-	lexer.Add([]byte(`=>`), token(RARROW))
+	lexer.Add([]byte(`->`), token(RARROW))
 	lexer.Add([]byte(`==`), token(EQ))
 	lexer.Add([]byte(`!=`), token(NE))
 	lexer.Add([]byte("break"), token(BREAK))
@@ -82,7 +82,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	source, err := os.ReadFile("./testfiles/integer.tn")
+	source, err := os.ReadFile("./testfiles/fn.tn")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -99,8 +99,9 @@ func main() {
 	// 	log.Println(tok.(tnSymType).id)
 	// }
 	tnErrorVerbose = true
-	tnDebug = 0
-	tnParse(&tnLex{Scanner: scanner})
+	tnDebug = 1
+	errcode := tnParse(&tnLex{Scanner: scanner})
+	log.Println("Parse result:", errcode)
 
 	// log.Printf("%#v", tnRoot)
 

@@ -1,8 +1,10 @@
 package main
 
 import (
+	"log"
 	"slices"
 	"strconv"
+	"strings"
 )
 
 type tnScope map[string]any
@@ -23,6 +25,12 @@ func NewExecCtx() *ExecCtx {
 func (ctx *ExecCtx) pushScope()            { ctx.scopes = append(ctx.scopes, nil) }
 func (ctx *ExecCtx) popScope()             { ctx.scopes = ctx.scopes[:len(ctx.scopes)-1] }
 func (ctx *ExecCtx) outterScope() *tnScope { return &ctx.scopes[len(ctx.scopes)-1] }
+func (ctx *ExecCtx) clone() *ExecCtx {
+	return &ExecCtx{
+		rootScope: ctx.rootScope,
+		scopes:    slices.Clone(ctx.scopes),
+	}
+}
 
 type (
 	expr interface {
@@ -57,6 +65,12 @@ type (
 		fn   expr
 		args []expr
 	}
+	exprFuncDefine struct {
+		args   []funcArgAnno
+		retTyp string
+		body   expr
+	}
+	funcArgAnno struct{ arg, typ string }
 )
 
 func (e exprEmpty) eval(ctx *ExecCtx) (any, bool) {
@@ -219,8 +233,36 @@ func (e exprFuncCall) eval(ctx *ExecCtx) (any, bool) {
 	return v, false
 }
 
+func (e exprFuncDefine) eval(ctx *ExecCtx) (any, bool) {
+	ctx = ctx.clone()
+	return func(args []any) any {
+		// TODO: check argument types
+		if paramsLen, argsLen := len(args), len(e.args); paramsLen != argsLen {
+			log.Panicf("wrong number of args: want %d got %d", argsLen, paramsLen)
+		}
+
+		// Create scope
+		ctx.pushScope()
+		defer ctx.popScope()
+
+		// Inject arguments
+		scope := ctx.outterScope()
+		*scope = make(tnScope)
+		for i, arg := range args {
+			(*scope)[e.args[i].arg] = arg
+		}
+
+		// Execute function body
+		v, brk := e.body.eval(ctx)
+		if brk {
+			panic("not allowed break here")
+		}
+		return v
+	}, false
+}
+
 func evalLiteral(sym tnSymType) expr {
-	literal := string(sym.Value.(unEvaled))
+	literal := string(sym.Lexeme)
 	if literal == "true" {
 		return exprLiteral{value: true}
 	}
@@ -229,6 +271,9 @@ func evalLiteral(sym tnSymType) expr {
 	}
 	if v, err := strconv.Atoi(literal); err == nil {
 		return exprLiteral{value: v}
+	}
+	if literal[0] == '"' {
+		return exprLiteral{value: strings.ReplaceAll(literal[1:len(literal)-1], `\"`, `"`)}
 	}
 
 	// Do nothing
