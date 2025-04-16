@@ -547,7 +547,7 @@ tndefault:
 		tnDollar = tnS[tnpt-0 : tnpt+1]
 //line tnzepl.y:37
 		{
-			tnVAL.Value = nil
+			tnVAL.Token = &lexmachine.Token{Value: exprProg{}}
 		}
 	case 13:
 		tnDollar = tnS[tnpt-1 : tnpt+1]
@@ -560,6 +560,12 @@ tndefault:
 //line tnzepl.y:41
 		{
 			tnVAL.Value = append(tnDollar[1].Value.(exprProg), tnDollar[3].Value.(expr))
+		}
+	case 15:
+		tnDollar = tnS[tnpt-2 : tnpt+1]
+//line tnzepl.y:42
+		{
+			tnVAL.Value = append(tnDollar[1].Value.(exprProg), exprEmpty{})
 		}
 	case 16:
 		tnDollar = tnS[tnpt-4 : tnpt+1]
@@ -590,6 +596,30 @@ tndefault:
 //line tnzepl.y:65
 		{
 			tnVAL.Value = exprContinue{}
+		}
+	case 28:
+		tnDollar = tnS[tnpt-4 : tnpt+1]
+//line tnzepl.y:80
+		{
+			tnVAL.Value = exprFuncCall{fn: tnDollar[1].Value.(expr), args: tnDollar[3].Value.([]expr)}
+		}
+	case 30:
+		tnDollar = tnS[tnpt-0 : tnpt+1]
+//line tnzepl.y:84
+		{
+			tnVAL.Token = &lexmachine.Token{Value: []expr{}}
+		}
+	case 32:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:87
+		{
+			tnVAL.Value = append(tnDollar[1].Value.([]expr), tnDollar[3].Value.(expr))
+		}
+	case 33:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:88
+		{
+			tnVAL.Value = []expr{tnDollar[1].Value.(expr)}
 		}
 	case 36:
 		tnDollar = tnS[tnpt-3 : tnpt+1]

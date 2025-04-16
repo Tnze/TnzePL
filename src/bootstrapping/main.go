@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -71,7 +72,7 @@ func main() {
 	lexer.Add([]byte("continue"), token(CONTINUE))
 	lexer.Add([]byte(`-?[0-9]+|true|false|"[^"]*"`), token(LITERAL))
 	lexer.Add([]byte(`[a-zA-Z_][a-zA-Z0-9_]*`), token(IDENTIFIER))
-	lexer.Add([]byte(`:|;|\{|\}|=|\(|\)|,`), singleCharToken)
+	lexer.Add([]byte(`:|;|\{|\}|=|\(|\)|,|\+|\-|\*|\/|%`), singleCharToken)
 	lexer.Add([]byte(`//[^\n]*\r?\n`), ignoreToken)
 	lexer.Add([]byte(` |\t|\r?\n`), ignoreToken)
 
@@ -101,6 +102,21 @@ func main() {
 
 	// log.Printf("%#v", tnRoot)
 
+	builtinScope["print"] = func(args []any) any {
+		n, _ := fmt.Println(args...)
+		return n
+	}
+	builtinScope["assert"] = func(args []any) any {
+		if len(args) != 1 {
+			panic("assert expect 1 boolean argument")
+		}
+		if v, ok := args[0].(bool); !ok {
+			panic("assert expression is not boolean")
+		} else if !v {
+			panic("assert failed")
+		}
+		return nil
+	}
 	tnRoot.eval()
 	log.Printf("%v", rootScope)
 }

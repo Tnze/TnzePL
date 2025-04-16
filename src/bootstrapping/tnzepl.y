@@ -34,12 +34,12 @@ atom_nb     : '(' atom_stmt ')' { $$.Value = $2.Value }
             | for_stmt
             ;
 
-expr_stmt   : /* empty */           { $$.Value = nil }
+expr_stmt   : /* empty */           { $$.Token = &lexmachine.Token{ Value: exprProg{ } } }
             | expr_list
             ;
 expr_list   : expr                  { $$.Token = &lexmachine.Token{ Value: exprProg{ $1.Value.(expr) } } }
             | expr_list ';' expr    { $$.Value = append($1.Value.(exprProg), $3.Value.(expr)) }
-            | expr_list ';'
+            | expr_list ';'         { $$.Value = append($1.Value.(exprProg), exprEmpty{} ) }
             ;
 
 
@@ -77,15 +77,15 @@ term        : term '*' call
             | call
             ;
 
-call        : atom '(' params_list ')'
+call        : atom '(' params_list ')' { $$.Value = exprFuncCall{ fn: $1.Value.(expr), args: $3.Value.([]expr) } }
             | atom
             ;
 
-params_list : /* empty */ 
+params_list : /* empty */ { $$.Token = &lexmachine.Token{ Value: []expr{} } }
             | params
             ;
-params      : params ',' expr
-            | expr
+params      : params ',' expr   { $$.Value = append($1.Value.([]expr), $3.Value.(expr)) }
+            | expr              { $$.Value = []expr{ $1.Value.(expr) } }
             ;
 
 if_stmt     : if_only

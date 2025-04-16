@@ -8,8 +8,9 @@ import (
 type tnScope map[string]any
 
 var (
+	builtinScope = make(tnScope)
 	rootScope = make(tnScope)
-	scopes    = []tnScope{rootScope}
+	scopes    = []tnScope{builtinScope, rootScope}
 )
 
 func pushScope() { scopes = append(scopes, nil) }
@@ -19,7 +20,8 @@ type (
 	expr interface {
 		eval() (v any, brk bool)
 	}
-	exprProg []expr
+	exprProg  []expr
+	exprEmpty struct{}
 	// Branch
 	exprIfCheckItem struct{ cond, action expr }
 	exprIf          struct {
@@ -42,7 +44,16 @@ type (
 	exprContinue struct{}
 	exprLoop     struct{ body expr }
 	exprWhile    struct{ cond, body, elseBranch expr }
+	// Operations
+	exprFuncCall struct {
+		fn   expr
+		args []expr
+	}
 )
+
+func (e exprEmpty) eval() (any, bool) {
+	return nil, false
+}
 
 func (e exprIf) eval() (v any, brk bool) {
 	for _, checkItem := range e.ifCheckList {
@@ -178,6 +189,26 @@ func (e exprWhile) eval() (any, bool) {
 func (e exprWhile) addElse(action tnSymType) expr {
 	e.elseBranch = action.Value.(expr)
 	return e
+}
+
+func (e exprFuncCall) eval() (any, bool) {
+	fn, brk := e.fn.eval()
+	if brk {
+		return fn, brk
+	}
+	args := make([]any, len(e.args))
+	for i, e := range e.args {
+		v, brk := e.eval()
+		if brk {
+			return v, brk
+		}
+		args[i] = v
+	}
+	
+	pushScope()
+	v := fn.(func(args []any) any)(args)
+	popScope()
+	return v, false
 }
 
 func evalLiteral(sym tnSymType) expr {
