@@ -9,8 +9,8 @@ type tnScope map[string]any
 
 var (
 	builtinScope = make(tnScope)
-	rootScope = make(tnScope)
-	scopes    = []tnScope{builtinScope, rootScope}
+	rootScope    = make(tnScope)
+	scopes       = []tnScope{builtinScope, rootScope}
 )
 
 func pushScope() { scopes = append(scopes, nil) }
@@ -204,7 +204,7 @@ func (e exprFuncCall) eval() (any, bool) {
 		}
 		args[i] = v
 	}
-	
+
 	pushScope()
 	v := fn.(func(args []any) any)(args)
 	popScope()

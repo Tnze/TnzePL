@@ -68,6 +68,8 @@ func main() {
 	lexer.Add([]byte("for"), token(FOR))
 	lexer.Add([]byte("fn"), token(FN))
 	lexer.Add([]byte(`=>`), token(RARROW))
+	lexer.Add([]byte(`==`), token(EQ))
+	lexer.Add([]byte(`!=`), token(NE))
 	lexer.Add([]byte("break"), token(BREAK))
 	lexer.Add([]byte("continue"), token(CONTINUE))
 	lexer.Add([]byte(`-?[0-9]+|true|false|"[^"]*"`), token(LITERAL))
@@ -80,7 +82,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	source, err := os.ReadFile("./testfiles/main.tn")
+	source, err := os.ReadFile("./testfiles/integer.tn")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -97,7 +99,7 @@ func main() {
 	// 	log.Println(tok.(tnSymType).id)
 	// }
 	tnErrorVerbose = true
-	tnDebug = 0
+	tnDebug = 1
 	tnParse(&tnLex{Scanner: scanner})
 
 	// log.Printf("%#v", tnRoot)
@@ -108,15 +110,15 @@ func main() {
 	}
 	builtinScope["assert"] = func(args []any) any {
 		if len(args) != 1 {
-			panic("assert expect 1 boolean argument")
+			log.Panic("assert expect 1 boolean argument")
 		}
 		if v, ok := args[0].(bool); !ok {
-			panic("assert expression is not boolean")
+			log.Panicf("assert expression type %T is not boolean", args[0])
 		} else if !v {
-			panic("assert failed")
+			log.Panic("assert failed")
 		}
 		return nil
 	}
 	tnRoot.eval()
-	log.Printf("%v", rootScope)
+	log.Printf("Root Scope: %v", rootScope)
 }

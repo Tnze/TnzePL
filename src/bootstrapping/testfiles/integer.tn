@@ -1,0 +1,8 @@
+// calculations
+assert(1 + 1 == 2);
+assert(2 * 2 == 4);
+assert(4 + 3 * 3 == 13);
+assert((4 + 3) * 3 == 21);
+assert(15 * 16 + 17 * 18 == 17 * 18 + 240);
+assert(25 / 5 == 5);
+assert(23 % 5 == 3);
