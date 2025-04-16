@@ -1,6 +1,6 @@
 let foo = 0;
-let bar = for {
+let bar = for true {
     foo = 1;
     break 2;
-};
+} else { 3 };
 

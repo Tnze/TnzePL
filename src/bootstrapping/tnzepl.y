@@ -100,10 +100,10 @@ if_only     : IF atom block_stmt                { $$.Value = exprIf{}.addIf($2, 
             ;
 
 for_stmt    : FOR block_stmt                    { $$.Value = exprLoop{ body: $2.Value.(expr) } }
-            | finite_for
-            | finite_for ELSE block_stmt
+            | finite_for                        { $$.Value = $1.Value }
+            | finite_for ELSE block_stmt        { $$.Value = $1.Value.(exprWhile).addElse($3) }
             ;
-finite_for  : FOR atom_nb block_stmt
+finite_for  : FOR atom_nb block_stmt            { $$.Value = exprWhile{ cond: $2.Value.(expr), body: $3.Value.(expr) } }
             | FOR atom_nb ';' atom ';' expr block_stmt
             | FOR LET IDENTIFIER ':' expr block_stmt
             ;

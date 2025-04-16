@@ -21,11 +21,8 @@ type (
 	}
 	exprProg []expr
 	// Branch
-	exprIfCheckItem struct {
-		cond   expr
-		action expr
-	}
-	exprIf struct {
+	exprIfCheckItem struct{ cond, action expr }
+	exprIf          struct {
 		ifCheckList []exprIfCheckItem
 		elseBranch  expr
 	}
@@ -44,6 +41,7 @@ type (
 	exprBreak    struct{ value expr }
 	exprContinue struct{}
 	exprLoop     struct{ body expr }
+	exprWhile    struct{ cond, body, elseBranch expr }
 )
 
 func (e exprIf) eval() (v any, brk bool) {
@@ -135,15 +133,6 @@ func (e exprProg) eval() (v any, brk bool) {
 	return
 }
 
-func (e exprLoop) eval() (any, bool) {
-	for {
-		v, brk := e.body.eval()
-		if brk && v != (exprContinue{}) {
-			return v, false // eat the flag
-		}
-	}
-}
-
 func (e exprBreak) eval() (any, bool) {
 	var v any
 	if e.value != nil {
@@ -154,6 +143,41 @@ func (e exprBreak) eval() (any, bool) {
 
 func (e exprContinue) eval() (any, bool) {
 	return e, true
+}
+
+func (e exprLoop) eval() (any, bool) {
+	for {
+		v, brk := e.body.eval()
+		if brk && v != (exprContinue{}) {
+			return v, false // eat the flag
+		}
+	}
+}
+
+func (e exprWhile) eval() (any, bool) {
+	for {
+		c, brk := e.cond.eval()
+		if brk && c != (exprContinue{}) {
+			// brak inside the condition also stop the loop
+			return c, false
+		}
+		if !c.(bool) {
+			if e.elseBranch != nil {
+				return e.elseBranch.eval()
+			} else {
+				return nil, false
+			}
+		}
+		v, brk := e.body.eval()
+		if brk && v != (exprContinue{}) {
+			return v, false
+		}
+	}
+}
+
+func (e exprWhile) addElse(action tnSymType) expr {
+	e.elseBranch = action.Value.(expr)
+	return e
 }
 
 func evalLiteral(sym tnSymType) expr {

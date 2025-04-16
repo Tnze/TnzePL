@@ -615,6 +615,24 @@ tndefault:
 		{
 			tnVAL.Value = exprLoop{body: tnDollar[2].Value.(expr)}
 		}
+	case 40:
+		tnDollar = tnS[tnpt-1 : tnpt+1]
+//line tnzepl.y:103
+		{
+			tnVAL.Value = tnDollar[1].Value
+		}
+	case 41:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:104
+		{
+			tnVAL.Value = tnDollar[1].Value.(exprWhile).addElse(tnDollar[3])
+		}
+	case 42:
+		tnDollar = tnS[tnpt-3 : tnpt+1]
+//line tnzepl.y:106
+		{
+			tnVAL.Value = exprWhile{cond: tnDollar[2].Value.(expr), body: tnDollar[3].Value.(expr)}
+		}
 	case 45:
 		tnDollar = tnS[tnpt-3 : tnpt+1]
 //line tnzepl.y:111
