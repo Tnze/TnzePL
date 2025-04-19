@@ -1,4 +1,0 @@
-let IDENTIFIER = INIT_EXPRESSION;
-
-let my_number: i32 = 8693;
-let my_string: string = "Tnze";
